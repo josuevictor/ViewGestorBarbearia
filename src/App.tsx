@@ -100,171 +100,169 @@ function App() {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white shadow-sm">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Scissors className="h-8 w-8 text-blue-600" />
-                <h1 className="ml-2 text-2xl font-bold text-gray-900">AdmBarbearia</h1>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Scissors className="h-8 w-8 text-blue-600" />
+              <h1 className="ml-2 text-2xl font-bold text-gray-900">AdmBarbearia</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="text-sm text-gray-500">
+                <Calendar className="inline-block h-4 w-4 mr-1" />
+                {today}
               </div>
-              <div className="flex items-center space-x-4">
-                <div className="text-sm text-gray-500">
-                  <Calendar className="inline-block h-4 w-4 mr-1" />
-                  {today}
-                </div>
-                <nav>
-                  <ul className="flex space-x-4">
-                    <li>
-                      <Link to="/" className="text-blue-600 hover:text-blue-800"><Home className="h-6 w-6" /></Link>
-                    </li>
-                    <li>
-                      <Link to="/pagamento" className="text-blue-600 hover:text-blue-800"><DollarSign className="h-6 w-6" /></Link>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
+              <nav>
+                <ul className="flex space-x-4">
+                  <li>
+                    <Link to="/" className="text-blue-600 hover:text-blue-800"><Home className="h-6 w-6" /></Link>
+                  </li>
+                  <li>
+                    <Link to="/pagamento" className="text-blue-600 hover:text-blue-800"><DollarSign className="h-6 w-6" /></Link>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
-        {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Routes>
-            <Route path="/pagamento" element={<PaymentScreen />} />
-            <Route path="/" element={
-              <div className="bg-white rounded-lg shadow">
-                <div className="px-6 py-4 border-b border-gray-200">
-                  <h2 className="text-lg font-medium text-gray-900">Agendamentos de Hoje</h2>
-                  <input
-                    type="text"
-                    placeholder="Filtrar agendamentos"
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
-                    className="mt-2 p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
-                
-                {/* Table */}
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Cliente
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Data_Hora
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Serviço
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Barbeiro
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Status
-                        </th>
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Routes>
+          <Route path="/pagamento" element={<PaymentScreen />} />
+          <Route path="/" element={
+            <div className="bg-white rounded-lg shadow">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-medium text-gray-900">Agendamentos de Hoje</h2>
+                <input
+                  type="text"
+                  placeholder="Filtrar agendamentos"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                  className="mt-2 p-2 border border-gray-300 rounded-md"
+                />
+              </div>
+              
+              {/* Table */}
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Cliente
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Data_Hora
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Serviço
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Barbeiro
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {currentAppointments.map((appointment, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="h-10 w-10 flex-shrink-0">
+                              <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                <User className="h-5 w-5 text-gray-500" />
+                              </div>
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900">
+                                {appointment.cliente}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <Clock className="h-4 w-4 text-gray-400 mr-2" />
+                            <div className="text-sm text-gray-900">{appointment.horario}</div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{appointment.servico}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{appointment.barbeiro}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(appointment.status)}`}>
+                            {appointment.status}
+                          </span>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {currentAppointments.map((appointment, index) => (
-                        <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <div className="h-10 w-10 flex-shrink-0">
-                                <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                  <User className="h-5 w-5 text-gray-500" />
-                                </div>
-                              </div>
-                              <div className="ml-4">
-                                <div className="text-sm font-medium text-gray-900">
-                                  {appointment.cliente}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <Clock className="h-4 w-4 text-gray-400 mr-2" />
-                              <div className="text-sm text-gray-900">{appointment.horario}</div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{appointment.servico}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">{appointment.barbeiro}</div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(appointment.status)}`}>
-                              {appointment.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Pagination */}
-                <div className="flex justify-between items-center mt-4">
-                  <button
-                    onClick={() => paginate(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
-                  >
-                    Anterior
-                  </button>
-                  <span>Página {currentPage}</span>
-                  <button
-                    onClick={() => paginate(currentPage + 1)}
-                    disabled={indexOfLastAppointment >= filteredAppointments.length}
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
-                  >
-                    Próximo
-                  </button>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            } />
-          </Routes>
-        </main>
 
-        {/* Confirmation Modal */}
-        {confirmationModal.isOpen && (
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-            <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Confirmar ação
-              </h3>
-              <p className="text-sm text-gray-500 mb-6">
-                Você tem certeza que deseja {confirmationModal.action} este agendamento?
-              </p>
-              <div className="flex justify-end space-x-3">
+              {/* Pagination */}
+              <div className="flex justify-between items-center mt-4">
                 <button
-                  onClick={closeConfirmationModal}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
                 >
-                  Cancelar
+                  Anterior
                 </button>
+                <span>Página {currentPage}</span>
                 <button
-                  onClick={updateStatus}
-                  className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
-                    confirmationModal.action === 'confirmar'
-                      ? 'bg-green-600 hover:bg-green-700'
-                      : 'bg-red-600 hover:bg-red-700'
-                  }`}
+                  onClick={() => paginate(currentPage + 1)}
+                  disabled={indexOfLastAppointment >= filteredAppointments.length}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
                 >
-                  Confirmar
+                  Próximo
                 </button>
               </div>
             </div>
+          } />
+        </Routes>
+      </main>
+
+      {/* Confirmation Modal */}
+      {confirmationModal.isOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              Confirmar ação
+            </h3>
+            <p className="text-sm text-gray-500 mb-6">
+              Você tem certeza que deseja {confirmationModal.action} este agendamento?
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={closeConfirmationModal}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={updateStatus}
+                className={`px-4 py-2 text-sm font-medium text-white rounded-md transition-colors ${
+                  confirmationModal.action === 'confirmar'
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-red-600 hover:bg-red-700'
+                }`}
+              >
+                Confirmar
+              </button>
+            </div>
           </div>
-        )}
-      </div>
-    </Router>
+        </div>
+      )}
+    </div>
   );
 }
 

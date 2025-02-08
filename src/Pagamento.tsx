@@ -7,7 +7,7 @@ const PaymentScreen: React.FC = () => {
   useEffect(() => {
     const requestData = {
       email: "victorarroxellas224@gmail.com",
-      transaction_amount: 50.00
+      transaction_amount: 1.00
     };
 
     fetch('http://127.0.0.1:8000/api/pagamento/pix', {
