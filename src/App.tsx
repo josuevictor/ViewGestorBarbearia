@@ -30,7 +30,7 @@ function App() {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/agendamento')
+    fetch('https://backendbarbearia-2.onrender.com/api/agendamento')
       .then(response => response.json())
       .then(data => setAppointments(data.object.original))
       .catch(error => console.error('Erro ao buscar agendamentos:', error));
