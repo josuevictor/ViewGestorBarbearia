@@ -10,7 +10,7 @@ const PaymentScreen: React.FC = () => {
       transaction_amount: 1.00
     };
 
-    fetch('http://127.0.0.1:8000/api/pagamento/pix', {
+    fetch('https://backendbarbearia-2.onrender.com/api/pagamento/pix', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
