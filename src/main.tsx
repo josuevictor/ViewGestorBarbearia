@@ -12,7 +12,7 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
-          path="/app"
+          path="/app/*"
           element={
             <ProtectedRoute>
               <App />

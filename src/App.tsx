@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Scissors, Check, X, Home, DollarSign } from 'lucide-react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { Calendar, Clock, User, Scissors, Check, X, Home, DollarSign, BarChart2 } from 'lucide-react';
+import { Route, Routes, Link } from 'react-router-dom';
 import PaymentScreen from './Pagamento';
+import Dashboard from './Dashboard'; // Importar o componente Dashboard
 
 type ConfirmationModal = {
   isOpen: boolean;
@@ -117,10 +118,13 @@ function App() {
               <nav>
                 <ul className="flex space-x-4">
                   <li>
-                    <Link to="/" className="text-blue-600 hover:text-blue-800"><Home className="h-6 w-6" /></Link>
+                    <Link to="/app" className="text-blue-600 hover:text-blue-800"><Home className="h-6 w-6" /></Link>
                   </li>
                   <li>
-                    <Link to="/pagamento" className="text-blue-600 hover:text-blue-800"><DollarSign className="h-6 w-6" /></Link>
+                    <Link to="/app/pagamento" className="text-blue-600 hover:text-blue-800"><DollarSign className="h-6 w-6" /></Link>
+                  </li>
+                  <li>
+                    <Link to="/app/dashboard" className="text-blue-600 hover:text-blue-800"><BarChart2 className="h-6 w-6" /></Link>
                   </li>
                 </ul>
               </nav>
@@ -132,7 +136,8 @@ function App() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Routes>
-          <Route path="/pagamento" element={<PaymentScreen />} />
+          <Route path="pagamento" element={<PaymentScreen />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="/" element={
             <div className="bg-white rounded-lg shadow">
               <div className="px-6 py-4 border-b border-gray-200">
