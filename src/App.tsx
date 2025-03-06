@@ -64,12 +64,33 @@ function App() {
     if (!confirmationModal.appointmentId || !confirmationModal.action) return;
 
     const newStatus = confirmationModal.action === 'confirmar' ? 'AGENDADO' : 'CANCELADO';
-    
-    setAppointments(appointments.map(appointment => 
-      appointment.id === confirmationModal.appointmentId 
-        ? { ...appointment, status: newStatus } 
-        : appointment
-    ));
+    const appointment = appointments.find(appointment => appointment.id === confirmationModal.appointmentId);
+
+    if (appointment) {
+      fetch('https://backendbarbearia-2.onrender.com/api/cancelarAgendamento', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cliente_id: appointment.id,
+          data_hora: appointment.horario,
+        }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            setAppointments(appointments.map(appointment =>
+              appointment.id === confirmationModal.appointmentId
+                ? { ...appointment, status: newStatus }
+                : appointment
+            ));
+          } else {
+            console.error('Erro ao atualizar status do agendamento:', data.msg);
+          }
+        })
+        .catch(error => console.error('Erro ao atualizar status do agendamento:', error));
+    }
 
     closeConfirmationModal();
   };
@@ -171,6 +192,9 @@ function App() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
                       </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Ações
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -206,6 +230,20 @@ function App() {
                           <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(appointment.status)}`}>
                             {appointment.status}
                           </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button
+                            onClick={() => openConfirmationModal(appointment.id, 'confirmar')}
+                            className="text-green-600 hover:text-green-900 mr-2"
+                          >
+                            <Check className="h-5 w-5" />
+                          </button>
+                          <button
+                            onClick={() => openConfirmationModal(appointment.id, 'cancelar')}
+                            className="text-red-600 hover:text-red-900"
+                          >
+                            <X className="h-5 w-5" />
+                          </button>
                         </td>
                       </tr>
                     ))}
