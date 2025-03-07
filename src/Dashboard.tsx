@@ -12,16 +12,14 @@ const Dashboard: React.FC = () => {
   const [agendamentosSemana, setAgendamentosSemana] = useState([]);
   const [totalAgendamentosMes, setTotalAgendamentosMes] = useState(0);
   const [agendamentosMes, setAgendamentosMes] = useState([]);
-  const [showClientes, setShowClientes] = useState(false);
-  const [showAgendamentosHoje, setShowAgendamentosHoje] = useState(false);
-  const [showAgendamentosSemana, setShowAgendamentosSemana] = useState(false);
-  const [showAgendamentosMes, setShowAgendamentosMes] = useState(false);
+  const [agendamentosPorSemana, setAgendamentosPorSemana] = useState<number[]>([]);
+  const [openCard, setOpenCard] = useState<string | null>(null); // Estado para controlar qual card está aberto
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [clientesPerPage] = useState(5);
 
   useEffect(() => {
-    // Substitua as URLs pelos endpoints reais da sua API
+    // Buscar clientes
     fetch('https://backendbarbearia-2.onrender.com/api/clientes')
       .then(response => response.json())
       .then(data => {
@@ -35,6 +33,7 @@ const Dashboard: React.FC = () => {
       })
       .catch(error => console.error('Erro ao buscar total de clientes:', error));
 
+    // Buscar agendamentos
     fetch('https://backendbarbearia-2.onrender.com/api/agendamento')
       .then(response => response.json())
       .then(data => {
@@ -64,12 +63,17 @@ const Dashboard: React.FC = () => {
       })
       .catch(error => console.error('Erro ao buscar total de agendamentos:', error));
 
-    fetch('http://127.0.0.1:8000/api/agendamentosDoMes')
+    // Buscar agendamentos do mês
+    fetch('https://backendbarbearia-2.onrender.com/api/agendamentosDoMes')
       .then(response => response.json())
       .then(data => {
         if (data.success) {
           setTotalAgendamentosMes(data.object.original.length);
           setAgendamentosMes(data.object.original);
+
+          // Calcular agendamentos por semana
+          const agendamentosPorSemana = calcularAgendamentosPorSemana(data.object.original);
+          setAgendamentosPorSemana(agendamentosPorSemana);
         } else {
           console.error('Erro ao buscar total de agendamentos do mês:', data.msg);
         }
@@ -77,12 +81,24 @@ const Dashboard: React.FC = () => {
       .catch(error => console.error('Erro ao buscar total de agendamentos do mês:', error));
   }, []);
 
+  const calcularAgendamentosPorSemana = (agendamentos: any[]) => {
+    const semanas: number[] = [0, 0, 0, 0]; // Inicializa com 4 semanas
+
+    agendamentos.forEach(agendamento => {
+      const dataAgendamento = new Date(agendamento.horario.split(' ')[0].split('/').reverse().join('-'));
+      const semana = Math.floor((dataAgendamento.getDate() - 1) / 7);
+      semanas[semana]++;
+    });
+
+    return semanas;
+  };
+
   const data = {
     labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
     datasets: [
       {
         label: 'Agendamentos por Semana',
-        data: [12, 50, 3, 5], // Dados fictícios
+        data: agendamentosPorSemana, // Usar os dados calculados
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
@@ -90,27 +106,15 @@ const Dashboard: React.FC = () => {
     ],
   };
 
-  const toggleClientes = () => {
-    setShowClientes(!showClientes);
-  };
-
-  const toggleAgendamentosHoje = () => {
-    setShowAgendamentosHoje(!showAgendamentosHoje);
-  };
-
-  const toggleAgendamentosSemana = () => {
-    setShowAgendamentosSemana(!showAgendamentosSemana);
-  };
-
-  const toggleAgendamentosMes = () => {
-    setShowAgendamentosMes(!showAgendamentosMes);
+  const toggleCard = (card: string) => {
+    setOpenCard(openCard === card ? null : card); // Fecha o card se ele já estiver aberto
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
     setFilteredClientes(
-      clientes.filter(cliente =>
+      clientes.filter((cliente: any) =>
         cliente.nome.toLowerCase().includes(term) ||
         cliente.sobrenome.toLowerCase().includes(term) ||
         cliente.cpf.includes(term) ||
@@ -137,34 +141,34 @@ const Dashboard: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             <div
               className="bg-blue-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center cursor-pointer"
-              onClick={toggleClientes}
+              onClick={() => toggleCard('clientes')}
             >
               <h3 className="text-lg font-semibold">Total de Clientes</h3>
               <p className="text-4xl font-bold">{totalClientes}</p>
             </div>
             <div
               className="bg-green-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center cursor-pointer"
-              onClick={toggleAgendamentosHoje}
+              onClick={() => toggleCard('agendamentosHoje')}
             >
               <h3 className="text-lg font-semibold">Agendamentos Hoje</h3>
               <p className="text-4xl font-bold">{totalAgendamentosDia}</p>
             </div>
             <div
               className="bg-yellow-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center cursor-pointer"
-              onClick={toggleAgendamentosSemana}
+              onClick={() => toggleCard('agendamentosSemana')}
             >
               <h3 className="text-lg font-semibold">Agendamentos na Semana</h3>
               <p className="text-4xl font-bold">{totalAgendamentosSemana}</p>
             </div>
             <div
               className="bg-red-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center cursor-pointer"
-              onClick={toggleAgendamentosMes}
+              onClick={() => toggleCard('agendamentosMes')}
             >
               <h3 className="text-lg font-semibold">Agendamentos no Mês</h3>
               <p className="text-4xl font-bold">{totalAgendamentosMes}</p>
             </div>
           </div>
-          {showClientes && (
+          {openCard === 'clientes' && (
             <div className="bg-white p-6 rounded-lg shadow-lg mb-8 w-full">
               <h3 className="text-lg font-semibold mb-4 text-gray-800">Lista de Clientes</h3>
               <input
@@ -186,7 +190,7 @@ const Dashboard: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {currentClients.map(cliente => (
+                    {currentClients.map((cliente: any) => (
                       <tr key={cliente.cpf}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{cliente.nome}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{cliente.sobrenome}</td>
@@ -206,7 +210,7 @@ const Dashboard: React.FC = () => {
               />
             </div>
           )}
-          {showAgendamentosHoje && (
+          {openCard === 'agendamentosHoje' && (
             <div className="bg-white p-6 rounded-lg shadow-lg mb-8 w-full">
               <h3 className="text-lg font-semibold mb-4 text-gray-800">Agendamentos de Hoje</h3>
               <div className="overflow-x-auto">
@@ -235,7 +239,7 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           )}
-          {showAgendamentosSemana && (
+          {openCard === 'agendamentosSemana' && (
             <div className="bg-white p-6 rounded-lg shadow-lg mb-8 w-full">
               <h3 className="text-lg font-semibold mb-4 text-gray-800">Agendamentos da Semana</h3>
               <div className="overflow-x-auto">
@@ -264,7 +268,7 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           )}
-          {showAgendamentosMes && (
+          {openCard === 'agendamentosMes' && (
             <div className="bg-white p-6 rounded-lg shadow-lg mb-8 w-full">
               <h3 className="text-lg font-semibold mb-4 text-gray-800">Agendamentos do Mês</h3>
               <div className="overflow-x-auto">
