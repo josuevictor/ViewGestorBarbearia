@@ -129,7 +129,7 @@ function App() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Scissors className="h-8 w-8 text-blue-600" />
-              <h1 className="ml-2 text-2xl font-bold text-gray-900">AdmBarbearia</h1>
+              <h1 className="ml-2 text-2xl font-bold text-gray-900">Sistema de gestão</h1>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-500">
@@ -162,7 +162,7 @@ function App() {
           <Route path="/" element={
             <div className="bg-white rounded-lg shadow">
               <div className="px-6 py-4 border-b border-gray-200">
-                <h2 className="text-lg font-medium text-gray-900">Agendamentos de Hoje</h2>
+                <h2 className="text-lg font-medium text-gray-900">Agenda</h2>
                 <input
                   type="text"
                   placeholder="Filtrar agendamentos"
