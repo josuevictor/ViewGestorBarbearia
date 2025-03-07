@@ -1,0 +1,47 @@
+[33mcommit 95e760c329f028aa548a849bf591ee47ec022c36[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Josue Victor <victorarroxellas01@gmail.com>
+Date:   Thu Mar 6 14:25:59 2025 -0300
+
+    ajuste dashboards
+
+[33mcommit 4b86fdf3e0d52c922201e3ea576f6c0e574c0f21[m
+Author: Josue Victor <victorarroxellas01@gmail.com>
+Date:   Thu Mar 6 11:55:24 2025 -0300
+
+    nova rota com os dashboards
+
+[33mcommit 36e29c0ffa76a0a2d5181a3d0162441efae9e794[m
+Author: Josue <victorarroxellas01@gmail.com>
+Date:   Tue Mar 4 13:27:49 2025 -0300
+
+    rota de produção no menu de pagamento
+
+[33mcommit ae8faac59f10185fa5205429003809741304cebc[m
+Author: Josue Victor <victorarroxellas01@gmail.com>
+Date:   Thu Feb 27 08:07:58 2025 -0300
+
+    ajuste na rta de login
+
+[33mcommit 80ce6dec885db2a84b143a0228c081484d73929a[m
+Author: Josue Victor <victorarroxellas01@gmail.com>
+Date:   Thu Feb 27 00:12:03 2025 -0300
+
+    alteração na url da api
+
+[33mcommit 9b4ae430220d11700f019bdba3168b11c57c27ab[m
+Author: Josue Victor <victorarroxellas01@gmail.com>
+Date:   Sat Feb 8 19:09:07 2025 -0300
+
+    criado os componentes para login
+
+[33mcommit 31a6c9f9d7698968deab226b9f24ade6c3a5bcca[m
+Author: Josue Victor <victorarroxellas01@gmail.com>
+Date:   Sat Feb 8 11:05:55 2025 -0300
+
+    rota de pagamento configurada para requsitar a api de pix, e gerar o qrCode em tela
+
+[33mcommit 96b42aaa2540e5ba903c9f6906ac933e451c8c7f[m
+Author: Josue Victor <victorarroxellas01@gmail.com>
+Date:   Fri Feb 7 10:04:56 2025 -0300
+
+    first commit

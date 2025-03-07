@@ -9,9 +9,11 @@ const Dashboard: React.FC = () => {
   const [totalAgendamentosDia, setTotalAgendamentosDia] = useState(0);
   const [agendamentosHoje, setAgendamentosHoje] = useState([]);
   const [totalAgendamentosSemana, setTotalAgendamentosSemana] = useState(0);
+  const [agendamentosSemana, setAgendamentosSemana] = useState([]);
   const [totalAgendamentosMes, setTotalAgendamentosMes] = useState(0);
   const [showClientes, setShowClientes] = useState(false);
   const [showAgendamentosHoje, setShowAgendamentosHoje] = useState(false);
+  const [showAgendamentosSemana, setShowAgendamentosSemana] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [clientesPerPage] = useState(5);
@@ -41,16 +43,24 @@ const Dashboard: React.FC = () => {
           );
           setTotalAgendamentosDia(agendamentosHoje.length);
           setAgendamentosHoje(agendamentosHoje);
+
+          const startOfWeek = new Date();
+          startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(endOfWeek.getDate() + 6);
+
+          const agendamentosSemana = data.object.original.filter((agendamento: any) => {
+            const agendamentoDate = new Date(agendamento.horario.split(' ')[0].split('/').reverse().join('-'));
+            return agendamentoDate >= startOfWeek && agendamentoDate <= endOfWeek;
+          });
+
+          setTotalAgendamentosSemana(agendamentosSemana.length);
+          setAgendamentosSemana(agendamentosSemana);
         } else {
-          console.error('Erro ao buscar total de agendamentos do dia:', data.msg);
+          console.error('Erro ao buscar total de agendamentos:', data.msg);
         }
       })
-      .catch(error => console.error('Erro ao buscar total de agendamentos do dia:', error));
-
-    fetch('https://api.exemplo.com/totalAgendamentosSemana')
-      .then(response => response.json())
-      .then(data => setTotalAgendamentosSemana(data.total))
-      .catch(error => console.error('Erro ao buscar total de agendamentos da semana:', error));
+      .catch(error => console.error('Erro ao buscar total de agendamentos:', error));
 
     fetch('https://api.exemplo.com/totalAgendamentosMes')
       .then(response => response.json())
@@ -63,7 +73,7 @@ const Dashboard: React.FC = () => {
     datasets: [
       {
         label: 'Agendamentos por Semana',
-        data: [12, 19, 3, 5], // Dados fictícios
+        data: [12, 50, 3, 5], // Dados fictícios
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
@@ -73,12 +83,14 @@ const Dashboard: React.FC = () => {
 
   const toggleClientes = () => {
     setShowClientes(!showClientes);
-    setShowAgendamentosHoje(false);
   };
 
   const toggleAgendamentosHoje = () => {
     setShowAgendamentosHoje(!showAgendamentosHoje);
-    setShowClientes(false);
+  };
+
+  const toggleAgendamentosSemana = () => {
+    setShowAgendamentosSemana(!showAgendamentosSemana);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,7 +136,10 @@ const Dashboard: React.FC = () => {
               <h3 className="text-lg font-semibold">Agendamentos Hoje</h3>
               <p className="text-4xl font-bold">{totalAgendamentosDia}</p>
             </div>
-            <div className="bg-yellow-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <div
+              className="bg-yellow-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center cursor-pointer"
+              onClick={toggleAgendamentosSemana}
+            >
               <h3 className="text-lg font-semibold">Agendamentos na Semana</h3>
               <p className="text-4xl font-bold">{totalAgendamentosSemana}</p>
             </div>
@@ -191,6 +206,35 @@ const Dashboard: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {agendamentosHoje.map((agendamento: any) => (
+                      <tr key={agendamento.horario}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.cliente}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.horario}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.servico}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.barbeiro}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          {showAgendamentosSemana && (
+            <div className="bg-white p-6 rounded-lg shadow-lg mb-8 w-full">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Agendamentos da Semana</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Horário</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serviço</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barbeiro</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {agendamentosSemana.map((agendamento: any) => (
                       <tr key={agendamento.horario}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.cliente}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.horario}</td>
