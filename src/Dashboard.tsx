@@ -11,9 +11,11 @@ const Dashboard: React.FC = () => {
   const [totalAgendamentosSemana, setTotalAgendamentosSemana] = useState(0);
   const [agendamentosSemana, setAgendamentosSemana] = useState([]);
   const [totalAgendamentosMes, setTotalAgendamentosMes] = useState(0);
+  const [agendamentosMes, setAgendamentosMes] = useState([]);
   const [showClientes, setShowClientes] = useState(false);
   const [showAgendamentosHoje, setShowAgendamentosHoje] = useState(false);
   const [showAgendamentosSemana, setShowAgendamentosSemana] = useState(false);
+  const [showAgendamentosMes, setShowAgendamentosMes] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [clientesPerPage] = useState(5);
@@ -62,9 +64,16 @@ const Dashboard: React.FC = () => {
       })
       .catch(error => console.error('Erro ao buscar total de agendamentos:', error));
 
-    fetch('https://api.exemplo.com/totalAgendamentosMes')
+    fetch('http://127.0.0.1:8000/api/agendamentosDoMes')
       .then(response => response.json())
-      .then(data => setTotalAgendamentosMes(data.total))
+      .then(data => {
+        if (data.success) {
+          setTotalAgendamentosMes(data.object.original.length);
+          setAgendamentosMes(data.object.original);
+        } else {
+          console.error('Erro ao buscar total de agendamentos do mês:', data.msg);
+        }
+      })
       .catch(error => console.error('Erro ao buscar total de agendamentos do mês:', error));
   }, []);
 
@@ -91,6 +100,10 @@ const Dashboard: React.FC = () => {
 
   const toggleAgendamentosSemana = () => {
     setShowAgendamentosSemana(!showAgendamentosSemana);
+  };
+
+  const toggleAgendamentosMes = () => {
+    setShowAgendamentosMes(!showAgendamentosMes);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +156,10 @@ const Dashboard: React.FC = () => {
               <h3 className="text-lg font-semibold">Agendamentos na Semana</h3>
               <p className="text-4xl font-bold">{totalAgendamentosSemana}</p>
             </div>
-            <div className="bg-red-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <div
+              className="bg-red-500 text-white p-6 rounded-lg shadow-lg flex flex-col items-center cursor-pointer"
+              onClick={toggleAgendamentosMes}
+            >
               <h3 className="text-lg font-semibold">Agendamentos no Mês</h3>
               <p className="text-4xl font-bold">{totalAgendamentosMes}</p>
             </div>
@@ -235,6 +251,35 @@ const Dashboard: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {agendamentosSemana.map((agendamento: any) => (
+                      <tr key={agendamento.horario}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.cliente}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.horario}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.servico}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.barbeiro}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          {showAgendamentosMes && (
+            <div className="bg-white p-6 rounded-lg shadow-lg mb-8 w-full">
+              <h3 className="text-lg font-semibold mb-4 text-gray-800">Agendamentos do Mês</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Horário</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serviço</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barbeiro</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {agendamentosMes.map((agendamento: any) => (
                       <tr key={agendamento.horario}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.cliente}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.horario}</td>
