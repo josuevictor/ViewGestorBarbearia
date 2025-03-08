@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Scissors, Check, X, Home, DollarSign, BarChart2 } from 'lucide-react';
+import { Calendar, Clock, User, Scissors, Check, X, Home, BarChart2 } from 'lucide-react';
 import { Route, Routes, Link } from 'react-router-dom';
 import PaymentScreen from './Pagamento';
 import Dashboard from './Dashboard'; // Importar o componente Dashboard
