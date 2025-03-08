@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Scissors, Check, X, Home, BarChart2 } from 'lucide-react';
+import { Calendar, Clock, User, Scissors, Check, X, Home, DollarSign, BarChart2 } from 'lucide-react';
 import { Route, Routes, Link } from 'react-router-dom';
 import PaymentScreen from './Pagamento';
 import Dashboard from './Dashboard'; // Importar o componente Dashboard
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPix } from '@fortawesome/free-brands-svg-icons';
 
 type ConfirmationModal = {
   isOpen: boolean;
@@ -145,7 +142,7 @@ function App() {
                     <Link to="/app" className="text-blue-600 hover:text-blue-800"><Home className="h-6 w-6" /></Link>
                   </li>
                   <li>
-                    <Link to="/app/pagamento" className="text-blue-600 hover:text-blue-800"><FontAwesomeIcon icon={faPix} className="h-6 w-6" /></Link>
+                    <Link to="/app/pagamento" className="text-blue-600 hover:text-blue-800"><DollarSign className="h-6 w-6" /></Link>
                   </li>
                   <li>
                     <Link to="/app/dashboard" className="text-blue-600 hover:text-blue-800"><BarChart2 className="h-6 w-6" /></Link>
