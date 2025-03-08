@@ -7,7 +7,8 @@ const PaymentScreen: React.FC = () => {
   useEffect(() => {
     const requestData = {
       email: "victorarroxellas224@gmail.com",
-      transaction_amount: 10.00
+      transaction_amount: 10.00,
+      barbearia_id: 1
     };
 
     fetch('https://backendbarbearia-2.onrender.com/api/pagamento/pix', {
