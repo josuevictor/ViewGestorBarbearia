@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal);
 
 const PaymentScreen: React.FC = () => {
   const [qrCode, setQrCode] = useState('');
@@ -40,9 +44,37 @@ const PaymentScreen: React.FC = () => {
         .then((data) => {
           setPaymentStatus(data.status); // Atualiza o status do pagamento
 
-          // Se o pagamento for aprovado, para de verificar
+          // Se o pagamento for aprovado, para de verificar e exibe o SweetAlert
           if (data.status === 'approved') {
             clearInterval(interval);
+            MySwal.fire({
+              title: 'Pagamento aprovado!',
+              text: 'Obrigado pela sua assinatura.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 3000,
+              didOpen: () => {
+                MySwal.showLoading();
+                setTimeout(() => {
+                  MySwal.fire({
+                    title: 'Pagamento aprovado!',
+                    text: 'Obrigado pela sua assinatura.',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    willClose: () => {
+                      // Exibe confetes
+                      const confetti = require('canvas-confetti');
+                      confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                      });
+                    },
+                  });
+                }, 1000);
+              },
+            });
           }
         })
         .catch((error) => console.error('Erro ao verificar status do pagamento:', error));
