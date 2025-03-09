@@ -53,27 +53,6 @@ const PaymentScreen: React.FC = () => {
               icon: 'success',
               showConfirmButton: false,
               timer: 3000,
-              didOpen: () => {
-                MySwal.showLoading();
-                setTimeout(() => {
-                  MySwal.fire({
-                    title: 'Pagamento aprovado!',
-                    text: 'Obrigado pela sua assinatura.',
-                    icon: 'success',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    willClose: () => {
-                      // Exibe confetes
-                      const confetti = require('canvas-confetti');
-                      confetti({
-                        particleCount: 100,
-                        spread: 70,
-                        origin: { y: 0.6 },
-                      });
-                    },
-                  });
-                }, 1000);
-              },
             });
           }
         })
