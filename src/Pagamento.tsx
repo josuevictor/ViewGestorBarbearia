@@ -9,9 +9,12 @@ const PaymentScreen: React.FC = () => {
   const [pixCopiaCola, setPixCopiaCola] = useState('');
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState(600); // 10 minutos em segundos
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  // Função para criar o pagamento PIX
-  useEffect(() => {
+  const generatePayment = () => {
+    setIsButtonDisabled(true); // Desativa o botão
+
     const requestData = {
       email: "victorarroxellas224@gmail.com",
       transaction_amount: 1.00,
@@ -30,9 +33,13 @@ const PaymentScreen: React.FC = () => {
         setQrCode(data.qr_code_base64);
         setPixCopiaCola(data.qr_code);
         setPaymentId(data.payment_id); // Armazena o ID do pagamento
+        setTimeLeft(600); // Reinicia o temporizador
       })
-      .catch((error) => console.error('Erro ao buscar o código QR:', error));
-  }, []);
+      .catch((error) => {
+        console.error('Erro ao buscar o código QR:', error);
+        setIsButtonDisabled(false); // Reativa o botão em caso de erro
+      });
+  };
 
   // Função para verificar o status do pagamento
   useEffect(() => {
@@ -62,9 +69,35 @@ const PaymentScreen: React.FC = () => {
     return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
   }, [paymentId]);
 
+  // Função para gerenciar o temporizador
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      MySwal.fire({
+        title: 'Tempo esgotado!',
+        text: 'O tempo para realizar o pagamento expirou. Por favor, gere um novo QR code.',
+        icon: 'error',
+        showConfirmButton: true,
+      });
+      setIsButtonDisabled(false); // Reativa o botão quando o tempo expira
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
   const handleCopy = () => {
     navigator.clipboard.writeText(pixCopiaCola);
     alert('Código PIX copiado para a área de transferência!');
+  };
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
   return (
@@ -72,6 +105,23 @@ const PaymentScreen: React.FC = () => {
       <h1>Pagamento da Mensalidade</h1>
       <p>Aqui você pode realizar o pagamento da mensalidade do sistema.</p>
       <p>Caso o pagamento não seja identificado, o acesso será bloqueado após 3 dias.</p>
+
+      {/* Botão para gerar o QR code */}
+      <button
+        onClick={generatePayment}
+        disabled={isButtonDisabled}
+        style={{
+          padding: '10px 20px',
+          border: 'none',
+          backgroundColor: isButtonDisabled ? '#ccc' : '#007bff',
+          color: '#fff',
+          borderRadius: '4px',
+          cursor: isButtonDisabled ? 'not-allowed' : 'pointer',
+          marginBottom: '20px',
+        }}
+      >
+        Gerar QR Code
+      </button>
 
       {/* Exibir o QR code */}
       {qrCode && (
@@ -113,6 +163,14 @@ const PaymentScreen: React.FC = () => {
               Copiar
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Exibir o temporizador */}
+      {qrCode && (
+        <div style={{ marginTop: '20px' }}>
+          <h2>Tempo restante para pagamento:</h2>
+          <p>{formatTime(timeLeft)}</p>
         </div>
       )}
 

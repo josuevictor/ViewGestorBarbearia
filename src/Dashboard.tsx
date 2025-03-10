@@ -125,6 +125,16 @@ const Dashboard: React.FC = () => {
     setCurrentPage(1); // Reset to first page on search
   };
 
+
+const formatPhoneNumber = (phoneNumber: string) => {
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{2})(\d{5})(\d{4})$/);
+    if (match) {
+      return `(${match[1]}) ${match[2]}-${match[3]}`;
+    }
+    return phoneNumber;
+  };
+
   // Get current clients
   const indexOfLastClient = currentPage * clientesPerPage;
   const indexOfFirstClient = indexOfLastClient - clientesPerPage;
@@ -218,6 +228,7 @@ const Dashboard: React.FC = () => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Horário</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serviço</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barbeiro</th>
@@ -228,6 +239,7 @@ const Dashboard: React.FC = () => {
                     {agendamentosHoje.map((agendamento: any) => (
                       <tr key={agendamento.horario}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.cliente}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{formatPhoneNumber(agendamento.telefone)}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.horario}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.servico}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.barbeiro}</td>
@@ -247,6 +259,7 @@ const Dashboard: React.FC = () => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Horário</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serviço</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barbeiro</th>
@@ -257,6 +270,7 @@ const Dashboard: React.FC = () => {
                     {agendamentosSemana.map((agendamento: any) => (
                       <tr key={agendamento.horario}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.cliente}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{formatPhoneNumber(agendamento.telefone)}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.horario}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.servico}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.barbeiro}</td>
@@ -276,6 +290,7 @@ const Dashboard: React.FC = () => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Horário</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serviço</th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barbeiro</th>
@@ -286,6 +301,7 @@ const Dashboard: React.FC = () => {
                     {agendamentosMes.map((agendamento: any) => (
                       <tr key={agendamento.horario}>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.cliente}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{formatPhoneNumber(agendamento.telefone)}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.horario}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.servico}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{agendamento.barbeiro}</td>
